@@ -53,20 +53,6 @@
           </div>
         </div>
         <div class="layui-inline">
-          <label class="layui-form-label">起始日期</label>
-          <div class="layui-input-block">
-            <input type="text" id="beginDate" placeholder="请输入" autocomplete="off"
-                   class="layui-input">
-          </div>
-        </div>
-        <div class="layui-inline">
-          <label class="layui-form-label">终止日期</label>
-          <div class="layui-input-block">
-            <input type="text" id="endDate" placeholder="请输入" autocomplete="off"
-                   class="layui-input">
-          </div>
-        </div>
-        <div class="layui-inline">
           <button class="layui-btn layuiadmin-btn-useradmin" data-type="reload">
             <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
           </button>
@@ -77,7 +63,6 @@
     <script type="text/html" id="test-table-toolbar-toolbarDemo">
       <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
-        <button class="layui-btn layui-btn-sm" lay-event="import">导入</button>
       </div>
     </script>
 
@@ -198,15 +183,6 @@
             ,content: 'serverdet.html?0'
             ,maxmin: true
             ,area: ['1200px', '600px']
-          });
-          break;
-        case 'import':
-          layer.open({
-            type: 2
-            ,title: '导入'
-            ,content: 'tblimp.html' // + data.relatId
-            ,maxmin: true
-            ,area: ['700px', '500px']
           });
           break;
       };

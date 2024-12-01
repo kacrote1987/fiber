@@ -12,36 +12,36 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.List;
 
-@Api(description = "客户管理")
+@Api(description = "套管仓库")
 @RestController
-@RequestMapping("/customer")
-public class CustomerController {
+@RequestMapping("/pipe")
+public class PipeController {
     @Resource
     CustomerService customerService;
 
-    @ApiOperation("客户列表")
-    @PostMapping("/customerList")
+    @ApiOperation("套管列表")
+    @PostMapping("/pipeList")
     public Result customerList(CustomerListForm params){
         PageInfo<CustomerListForm> customerList= customerService.customerList(params);
         return Result.success(customerList);
     }
 
-    @ApiOperation("客户详细")
-    @PostMapping("/customerDet")
+    @ApiOperation("套管详细")
+    @PostMapping("/pipeDet")
     public Result customerDet(@RequestBody Long customerId){
         List<CustomerDetForm> customerDet= customerService.customerDet(customerId);
         return Result.success(customerDet);
     }
 
-    @ApiOperation("客户保存")
-    @PostMapping("/customerSave")
+    @ApiOperation("套管保存")
+    @PostMapping("/pipeSave")
     public Result customerSave(@RequestBody CustomerDetForm params){
         customerService.customerSave(params);
         return Result.success();
     }
 
-    @ApiOperation("客户删除")
-    @PostMapping("/customerDel")
+    @ApiOperation("套管删除")
+    @PostMapping("/pipeDel")
     public Result customerDel(@RequestParam Long customerId){
         customerService.customerDel(customerId);
         return Result.success();

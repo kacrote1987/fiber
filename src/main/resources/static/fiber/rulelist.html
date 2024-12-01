@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>服务器列表</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+  <div class="layui-card">
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">托管机房</label>
+          <div class="layui-input-block">
+            <input type="text" id="serverRoom" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">托管机柜</label>
+          <div class="layui-input-block">
+            <input type="text" id="serverCabinet" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">服务器名称</label>
+          <div class="layui-input-block">
+            <input type="text" id="serverName" placeholder="请输入" autocomplete="off"
+                   class="layui-input">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">运行状态</label>
+          <div class="layui-input-block">
+            <select id="serverState">
+              <option value="">全部</option>
+              <option value="正常">正常</option>
+              <option value="空闲">空闲</option>
+              <option value="屏蔽">屏蔽</option>
+              <option value="关机">关机</option>
+              <option value="未续费">未续费</option>
+              <option value="故障">故障</option>
+              <option value="待交付">待交付</option>
+            </select>
+          </div>
+        </div>
+        <div class="layui-inline">
+          <button class="layui-btn layuiadmin-btn-useradmin" data-type="reload">
+            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/html" id="test-table-toolbar-toolbarDemo">
+      <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
+      </div>
+    </script>
+
+    <script type="text/html" id="test-table-toolbar-barDemo">
+      <a id="det" class="layui-btn layui-btn-xs" lay-event="det">详细</a>
+      <a id="del" class="layui-btn layui-btn-xs" lay-event="del">删除</a>
+    </script>
+
+    <div class="layui-card-body">
+      <table id="test-table-toolbar" lay-filter="test-table-toolbar"></table>
+      <script type="text/html" id="imgTpl">
+        <img style="display: inline-block; width: 50%; height: 100%;" src={{ d.avatar }}>
+      </script>
+    </div>
+  </div>
+</div>
+
+<script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/script/login.js"></script>
+<script src="js/demo.js"></script>
+<script src="js/laypage.js"></script>
+<script src="layuiadmin/layui/layui.js"></script>
+<script>
+  layui.config({
+    base: 'layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'form', 'table', 'laydate', 'laypage', 'layer'], function () {
+    var admin = layui.admin
+            , table = layui.table
+            , $ = layui.$
+            , element = layui.element
+            , layer = layui.layer
+            , form = layui.form;
+
+    element.render('progress');
+
+    table.render({
+      elem: '#test-table-toolbar'
+      , id: 'serverReload'
+      , method: 'post'
+      , url: '/server/serverList/' //数据接口
+      , response: {
+        statusName: 'code',
+        statusCode: '200'
+      }
+      , toolbar: '#test-table-toolbar-toolbarDemo'
+      , title: '资产基础信息表'
+      , cols: [[
+        {type: 'checkbox', fixed: 'left', width: '5%'}
+        , {field: 'serverId', title: '序号', width: '5%'}
+        , {field: 'serverRoom', title: '托管机房' , width: '6%'}
+        , {field: 'serverCabinet', title: '托管机柜' , width: '6%'}
+        , {field: 'serverNumber', title: '服务器编号' , width: '7%'}
+        , {field: 'serverName', title: '服务器名称', width: '7%'}
+        , {field: 'serverConfig', title: '服务器配置', width: '7%'}
+        , {field: 'serverIp', title: '服务器IP', width: '7%'}
+        , {field: 'backupIp', title: '备用IP', width: '7%'}
+        , {field: 'serverState', title: '运行状态', width: '6%'}
+        , {field: 'beginDate', title: '起始日期', width: '7%'}
+        , {field: 'endDate', title: '终止日期', width: '7%'}
+        , {field: 'serverPrice', title: '价格', width: '6%'}
+        , {field: 'serverCost', title: '成本', width: '6%'}
+        , {field: 'serverProfit', title: '利润', width: '6%'}
+        , {field: 'serverArrears', title: '欠款', width: '6%'}
+        , {field: 'customerName', title: '客户姓名', width: '6%'}
+        , {field: 'customerTel', title: '联系电话', width: '6%'}
+        , {field: 'customerQq', title: '客户QQ', width: '6%'}
+        , {field: 'customerWw', title: '旺旺ID', width: '6%'}
+        , {field: 'serverRemark', title: '备注信息', width: '6%'}
+        , {fixed: 'right', title: '操作', toolbar: '#test-table-toolbar-barDemo', width: '7%'}
+      ]]
+      , page: true
+      , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+        return {
+          "code": res.code, //解析接口状态
+          "msg": res.msg, //解析提示文本
+          "count": res.data.total, //解析数据长度
+          "data": res.data.list //解析数据列表
+        };
+      }
+    });
+
+    //执行重载
+    var $ = layui.$, active = {
+      reload: function () {
+        var serverRoom = $('#serverRoom');
+        var serverCabinet = $('#serverCabinet');
+        var serverName = $('#serverName');
+        var serverState = $('#serverState');
+        var beginDate = $('#beginDate');
+        var endDate = $('#endDate');
+        table.reload('serverReload', {
+          page: {
+            curr: 1 //重新从第 1 页开始
+          }
+          , where: {
+            serverRoom: serverRoom.val(),
+            serverCabinet: serverCabinet.val(),
+            serverName: serverName.val(),
+            serverState: serverState.val(),
+            beginDate: beginDate.val(),
+            endDate: endDate.val()
+          }
+        }, 'data');
+      }
+    };
+
+    //头工具栏事件
+    table.on('toolbar(test-table-toolbar)', function(obj){
+      var checkStatus = table.checkStatus(obj.config.id);
+      switch(obj.event){
+        case 'add':
+          layer.open({
+            type: 2
+            ,title: '新增'
+            ,content: 'serverdet.html?0'
+            ,maxmin: true
+            ,area: ['1200px', '600px']
+          });
+          break;
+      };
+    });
+
+    //监听行工具事件
+    table.on('tool(test-table-toolbar)', function (obj) {
+      var data = obj.data;
+      if (obj.event === 'det') {
+        layer.open({
+          type: 2
+          , title: '服务器详细'
+          , content: 'serverdet.html?' + data.serverId
+          , maxmin: true
+          , area: ['1200px', '600px']
+        });
+      }else{
+        layer.confirm('是否删除？', {
+          btn: ['是','否'] //按钮
+        }, function(){
+          postdata(null,"/server/offLine?serverId=" + data.serverId,function () {
+            table.reload('serverReload');layer.msg("已删除");});
+        });
+      }
+    });
+
+    $('.layui-fluid .layui-btn').on('click', function () {
+      var type = $(this).data('type');
+      active[type] ? active[type].call(this) : '';
+    });
+  });
+</script>
+</body>
+</html>
